@@ -205,8 +205,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Panel panel_drawing;
         private System.Windows.Forms.ToolStrip menu;
         private System.Windows.Forms.ToolStripButton drawellipse;
         private System.Windows.Forms.ToolStripButton drawsquare;
@@ -220,6 +218,7 @@
         private System.Windows.Forms.ToolStripButton drawline;
         private System.Windows.Forms.Button btn_select_color;
         private System.Windows.Forms.ColorDialog colorDialog1;
+        private System.Windows.Forms.Panel panel_drawing;
     }
 }
 
