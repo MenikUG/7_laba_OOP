@@ -42,6 +42,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.btn_select_color = new System.Windows.Forms.Button();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
+            this.btn_group = new System.Windows.Forms.Button();
             this.menu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -184,11 +185,24 @@
             // 
             this.colorDialog1.Color = System.Drawing.Color.White;
             // 
+            // btn_group
+            // 
+            this.btn_group.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btn_group.BackColor = System.Drawing.Color.Transparent;
+            this.btn_group.Location = new System.Drawing.Point(661, 277);
+            this.btn_group.Name = "btn_group";
+            this.btn_group.Size = new System.Drawing.Size(123, 62);
+            this.btn_group.TabIndex = 3;
+            this.btn_group.Text = "Сгруппировать";
+            this.btn_group.UseVisualStyleBackColor = false;
+            this.btn_group.Click += new System.EventHandler(this.btn_group_Click);
+            // 
             // laba7
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(793, 456);
+            this.Controls.Add(this.btn_group);
             this.Controls.Add(this.btn_select_color);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.menu);
@@ -219,6 +233,7 @@
         private System.Windows.Forms.Button btn_select_color;
         private System.Windows.Forms.ColorDialog colorDialog1;
         private System.Windows.Forms.Panel panel_drawing;
+        private System.Windows.Forms.Button btn_group;
     }
 }
 

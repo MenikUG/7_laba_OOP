@@ -23,6 +23,7 @@ namespace _7_laba_OOP
 			public Color color = Color.Navy;
 			public Color fillcolor = Color.White;
 
+			public virtual void GroupAddFigure(ref Figure object1) { }
 			public virtual void paint_figure(Pen pen, Brush figurefillcolor, Panel panel_drawing) { }
 			public virtual void move_x(int x, Panel panel_drawing) { }
 			public virtual void move_y(int y, Panel panel_drawing) { }
@@ -43,7 +44,7 @@ namespace _7_laba_OOP
 					group[i] = null;
 			}
 
-			public void GroupAddFigure(ref Figure object1)
+			public override void GroupAddFigure(ref Figure object1)
             {
 				if (count >= maxcount)
 					return;
@@ -128,7 +129,6 @@ namespace _7_laba_OOP
 					(y - this.y - rad)) < (rad * rad);
 			}
 		}
-
 		class Line: Figure
 		{
 			public int lenght = 60;
@@ -220,7 +220,7 @@ namespace _7_laba_OOP
 		}
 
 		int p = 0; // Нажат ли был ранее Ctrl
-		static int k = 10; // Кол-во ячеек в хранилище
+		static int k = 5; // Кол-во ячеек в хранилище
 		Storage storag = new Storage(k); // Создаем объект хранилища
 		static int index = 0; // Кол-во нарисованных кругов
 		int indexin = 0; // Индекс, в какое место был помещён круг
@@ -254,7 +254,8 @@ namespace _7_laba_OOP
 			public void delete_object(int ind)
 			{   // Удаляет объект из хранилища
 				objects[ind] = null;
-				index--;
+                if (index > 0)
+					index--;
 			}
 			public bool check_empty(int index)
 			{   // Проверяет занято ли место хранилище
@@ -503,5 +504,20 @@ namespace _7_laba_OOP
 					}
 			}
 		}
+
+        private void btn_group_Click(object sender, EventArgs e)
+        {
+			Figure group = new Group();
+			for(int i = 0; i < k; ++i)
+            {
+				if (!storag.check_empty(i))
+					if (storag.objects[i].color == Color.Red)
+					{
+						group.GroupAddFigure(ref storag.objects[i]);
+						storag.delete_object(i);
+					}
+			}
+			storag.add_object(index, ref group, k, ref indexin);
+        }
     }
 }
