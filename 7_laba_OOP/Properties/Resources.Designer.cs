@@ -63,6 +63,16 @@ namespace _7_laba_OOP.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap delete {
+            get {
+                object obj = ResourceManager.GetObject("delete", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap ellipse {
             get {
                 object obj = ResourceManager.GetObject("ellipse", resourceCulture);
@@ -86,6 +96,16 @@ namespace _7_laba_OOP.Properties {
         public static System.Drawing.Bitmap square {
             get {
                 object obj = ResourceManager.GetObject("square", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap uhhhh {
+            get {
+                object obj = ResourceManager.GetObject("uhhhh", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
