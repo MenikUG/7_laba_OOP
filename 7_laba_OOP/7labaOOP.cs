@@ -24,6 +24,7 @@ namespace _7_laba_OOP
 			public Color fillcolor = Color.White;
 
 			public virtual void GroupAddFigure(ref Figure object1) { }
+			public virtual void UnGroup(ref Storage stg, int c) { }
 			public virtual void paint_figure(Pen pen, Brush figurefillcolor, Panel panel_drawing) { }
 			public virtual void move_x(int x, Panel panel_drawing) { }
 			public virtual void move_y(int y, Panel panel_drawing) { }
@@ -50,6 +51,15 @@ namespace _7_laba_OOP
 					return;
 				group[count] = object1;
 				++count;
+			}
+
+			public override void UnGroup(ref Storage stg, int c)
+			{
+				stg.delete_object(c);
+				for(int i = 0; i < count; ++i)
+                {
+					stg.add_object(index, ref group[i], k, ref indexin);
+                }
 			}
 			public override void paint_figure(Pen pen, Brush figurefillcolor, Panel panel_drawing)
 			{
@@ -223,10 +233,10 @@ namespace _7_laba_OOP
 		static int k = 5; // Кол-во ячеек в хранилище
 		Storage storag = new Storage(k); // Создаем объект хранилища
 		static int index = 0; // Кол-во нарисованных кругов
-		int indexin = 0; // Индекс, в какое место был помещён круг
+		static int indexin = 0; // Индекс, в какое место был помещён круг
 		int figure_now = 1;	// Какая фигура выбрана
 
-		class Storage
+		public class Storage
 		{
 			public Figure[] objects;
 			public Storage(int count)
@@ -519,5 +529,18 @@ namespace _7_laba_OOP
 			}
 			storag.add_object(index, ref group, k, ref indexin);
         }
+
+        private void btn_ungroup_Click(object sender, EventArgs e)
+        {
+			for (int i = 0; i < k; ++i)
+			{
+				if (!storag.check_empty(i))
+					if (storag.objects[i].color == Color.Red)
+					{
+						storag.objects[i].UnGroup(ref storag, i);
+						return;
+					}
+			}
+		}
     }
 }
