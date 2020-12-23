@@ -22,18 +22,19 @@ namespace _7_laba_OOP
 		{	// Composite и factory method
 			public int x, y;
 			public Color color = Color.Navy;
-			public Color fillcolor = Color.White;
+			public Color fillcolor;
 			public Figure() { }
 			public virtual string save() { return ""; }
-			public virtual void load(string x, string y, string c) { }
-            public virtual void load(ref StreamReader sr, Figure figure) { }
-            public virtual void GroupAddFigure(ref Figure object1) { }
+			public virtual void load(string x, string y, string c, string fillcolor) { }
+			public virtual void load(ref StreamReader sr, Figure figure) { }
+			public virtual void GroupAddFigure(ref Figure object1) { }
 			public virtual void UnGroup(ref Storage stg, int c) { }
-			public virtual void paint_figure(Pen pen, Brush figurefillcolor, Panel panel_drawing) { }
+			public virtual void paint_figure(Pen pen, Panel panel_drawing) { }
 			public virtual void move_x(int x, Panel panel_drawing) { }
 			public virtual void move_y(int y, Panel panel_drawing) { }
 			public virtual void changesize(int size) { }
 			public virtual bool checkfigure(int x, int y) { return false; }
+			public virtual void setcolor(Color color) {	}
 
 		}
 		class Group : Figure
@@ -55,16 +56,16 @@ namespace _7_laba_OOP
 					str += "\n" + group[i].save();
 				return str;
 			}
-            public override void load(ref StreamReader sr, Figure figure)
-            {
+			public override void load(ref StreamReader sr, Figure figure)
+			{
 				int chislo = Convert.ToInt32(sr.ReadLine());
 				for (int i = 0; i < chislo; ++i)
-                {
+				{
 					caseswitch(ref sr, ref figure);
 					GroupAddFigure(ref figure);
 				}
-            }
-            public override void GroupAddFigure(ref Figure object1)
+			}
+			public override void GroupAddFigure(ref Figure object1)
 			{
 				if (count >= maxcount)
 					return;
@@ -79,11 +80,11 @@ namespace _7_laba_OOP
 					stg.add_object(index, ref group[i], k, ref indexin);
 				}
 			}
-			public override void paint_figure(Pen pen, Brush figurefillcolor, Panel panel_drawing)
+			public override void paint_figure(Pen pen, Panel panel_drawing)
 			{
 				for(int i = 0; i < count; ++i)
 				{
-					group[i].paint_figure(pen, figurefillcolor, panel_drawing);
+					group[i].paint_figure(pen, panel_drawing);
 				}
 			}
 			public override void move_x(int x, Panel panel_drawing)
@@ -116,6 +117,14 @@ namespace _7_laba_OOP
 				}
 				return false;
 			}
+			public override void setcolor(Color color)
+			{
+				for(int i = 0; i < count; ++i)
+                {
+					group[i].setcolor(color);
+                }
+			}
+
 		}
 		class Circle: Figure
 		{
@@ -129,16 +138,18 @@ namespace _7_laba_OOP
 			}
 			public override string save()
 			{
-				return "Circle" + "\n" + x + "\n" + y + "\n" + rad;				
+				return "Circle" + "\n" + x + "\n" + y + "\n" + rad + "\n" + fillcolor.ToArgb().ToString();				
 			}
-			public override void load(string x, string y, string rad)
+			public override void load(string x, string y, string rad, string fillcolor)
 			{
 				this.x = Convert.ToInt32(x);
 				this.y = Convert.ToInt32(y);
 				this.rad = Convert.ToInt32(rad);
+				this.fillcolor = Color.FromArgb(Convert.ToInt32(fillcolor));
 			}
-			public override void paint_figure(Pen pen, Brush figurefillcolor, Panel panel_drawing)
-			{			
+			public override void paint_figure(Pen pen, Panel panel_drawing)
+			{
+				SolidBrush figurefillcolor = new SolidBrush(fillcolor);
 				panel_drawing.CreateGraphics().DrawEllipse(
 					pen, x, y, rad * 2, rad * 2);
 				panel_drawing.CreateGraphics().FillEllipse(
@@ -165,6 +176,10 @@ namespace _7_laba_OOP
 				return ((x - this.x - rad) * (x - this.x - rad) + (y - this.y - rad) *
 					(y - this.y - rad)) < (rad * rad);
 			}
+			public override void setcolor(Color color)
+			{
+				fillcolor = color;
+			}
 		}
 		class Line: Figure
 		{
@@ -178,16 +193,18 @@ namespace _7_laba_OOP
 			}
 			public override string save()
 			{
-				return "Line" + "\n" + x + "\n" + y + "\n" + lenght;
+				return "Line" + "\n" + x + "\n" + y + "\n" + lenght + "\n" + fillcolor.ToArgb().ToString();
 			}
-			public override void load(string x, string y, string lenght)
+			public override void load(string x, string y, string lenght, string fillcolor)
 			{
 				this.x = Convert.ToInt32(x);
 				this.y = Convert.ToInt32(y);
 				this.lenght = Convert.ToInt32(lenght);
+				this.fillcolor = Color.FromArgb(Convert.ToInt32(fillcolor));
 			}
-			public override void paint_figure(Pen pen, Brush figurefillcolor, Panel panel_drawing)
+			public override void paint_figure(Pen pen, Panel panel_drawing)
 			{
+				SolidBrush figurefillcolor = new SolidBrush(fillcolor);
 				panel_drawing.CreateGraphics().DrawRectangle(pen, x,
 										y, lenght, wight);
 				panel_drawing.CreateGraphics().FillRectangle(figurefillcolor, x,
@@ -214,6 +231,10 @@ namespace _7_laba_OOP
 				return (this.x <= x && x <= (this.x + lenght) && (this.y - 2) <= y &&
 									y <= (this.y + wight));
 			}
+			public override void setcolor(Color color)
+			{
+				fillcolor = color;
+			}
 		}
 		class Square: Figure
 		{
@@ -226,16 +247,18 @@ namespace _7_laba_OOP
 			}
 			public override string save()
 			{
-				return "Square" + "\n" + x + "\n" + y + "\n" + size;
+				return "Square" + "\n" + x + "\n" + y + "\n" + size + "\n" + fillcolor.ToArgb().ToString();
 			}
-			public override void load(string x, string y, string size)
+			public override void load(string x, string y, string size, string fillcolor)
 			{
 				this.x = Convert.ToInt32(x);
 				this.y = Convert.ToInt32(y);
 				this.size = Convert.ToInt32(size);
+				this.fillcolor = Color.FromArgb(Convert.ToInt32(fillcolor));
 			}
-			public override void paint_figure(Pen pen, Brush figurefillcolor, Panel panel_drawing)
+			public override void paint_figure(Pen pen, Panel panel_drawing)
 			{
+				SolidBrush figurefillcolor = new SolidBrush(fillcolor);
 				panel_drawing.CreateGraphics().DrawRectangle(pen,
 					x, y, size, size);
 				panel_drawing.CreateGraphics().FillRectangle(figurefillcolor,
@@ -261,6 +284,10 @@ namespace _7_laba_OOP
 			{
 				return (this.x <= x && x <= (this.x + size) &&
 										this.y <= y && y <= (this.y + size));
+			}
+			public override void setcolor(Color color)
+			{
+				fillcolor = color;
 			}
 		}
 		static public void check(int f, int chislo, int gran, int gran1, ref int x)
@@ -460,8 +487,7 @@ namespace _7_laba_OOP
 			{
 				Pen pen = new Pen(name, size);
 				stg.objects[index].color = name;
-				SolidBrush figurefillcolor = new SolidBrush(stg.objects[index].fillcolor);
-				stg.objects[index].paint_figure(pen, figurefillcolor, panel_drawing);                
+				stg.objects[index].paint_figure(pen, panel_drawing);                
 			}
 		}
 		private void paint_all(ref Storage stg)
@@ -552,7 +578,7 @@ namespace _7_laba_OOP
 				if (!storag.check_empty(i))
 					if (storag.objects[i].color == Color.Red)
 					{
-						storag.objects[i].fillcolor = colorDialog1.Color;
+						storag.objects[i].setcolor(colorDialog1.Color);
 						paint_figure(storag.objects[i].color, 4, ref storag, i);
 					}
 			}
@@ -599,21 +625,21 @@ namespace _7_laba_OOP
 			}
 		}
 		static void caseswitch(ref StreamReader sr, ref Figure figure)
-        {
+		{
 			string str = sr.ReadLine();
 			switch (str)
 			{   // В зависимости какая фигура выбрана
 				case "Circle":
 					figure = new Circle();
-					figure.load(sr.ReadLine(), sr.ReadLine(), sr.ReadLine());
+					figure.load(sr.ReadLine(), sr.ReadLine(), sr.ReadLine(), sr.ReadLine());
 					break;
 				case "Line":
 					figure = new Line();
-					figure.load(sr.ReadLine(), sr.ReadLine(), sr.ReadLine());
+					figure.load(sr.ReadLine(), sr.ReadLine(), sr.ReadLine(), sr.ReadLine());
 					break;
 				case "Square":
 					figure = new Square();
-					figure.load(sr.ReadLine(), sr.ReadLine(), sr.ReadLine());
+					figure.load(sr.ReadLine(), sr.ReadLine(), sr.ReadLine(), sr.ReadLine());
 					break;
 				case "Group":
 					figure = new Group();
@@ -640,16 +666,16 @@ namespace _7_laba_OOP
 				sr.Close();
 			}
 		}
-        private void Clear_Click(object sender, EventArgs e)
-        {
+		private void Clear_Click(object sender, EventArgs e)
+		{
 			for(int i = 0; i < k; ++i)
-            {
+			{
 				if (!storag.check_empty(i))
 				{
 					storag.delete_object(i);
 				}
 			}
 			panel_drawing.Refresh();
-        }
-    }
+		}
+	}
 }
