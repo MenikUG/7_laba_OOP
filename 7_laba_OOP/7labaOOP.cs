@@ -29,12 +29,68 @@ namespace _7_laba_OOP
 			public virtual void changesize(int size) { }
 			public virtual bool checkfigure(int x, int y) { return false; }
 
-
 		}
 		class Group : Figure
 		{
+			public int maxcount = 10;
+			public Figure[] group;
+			public int count;
+			public Group()
+			{   // Выделяем maxcount мест в хранилище
+				count = 0;
+				group = new Figure[maxcount];
+				for (int i = 0; i < maxcount; ++i)
+					group[i] = null;
+			}
 
-		}
+			public void GroupAddFigure(ref Figure object1)
+            {
+				if (count >= maxcount)
+					return;
+				group[count] = object1;
+				++count;
+			}
+			public override void paint_figure(Pen pen, Brush figurefillcolor, Panel panel_drawing)
+			{
+				for(int i = 0; i < count; ++i)
+                {
+					group[i].paint_figure(pen, figurefillcolor, panel_drawing);
+                }
+			}
+
+            public override void move_x(int x, Panel panel_drawing)
+            {
+				for (int i = 0; i < count; ++i)
+				{
+					group[i].move_x(x, panel_drawing);
+				}
+			}
+
+			public override void move_y(int y, Panel panel_drawing)
+			{
+				for (int i = 0; i < count; ++i)
+				{
+					group[i].move_y(y, panel_drawing);
+				}
+			}
+			public override void changesize(int size)
+			{
+				for (int i = 0; i < count; ++i)
+				{
+					group[i].changesize(size);
+				}
+			}
+
+            public override bool checkfigure(int x, int y)
+            {
+                for(int i = 0; i < count; ++i)
+                {
+					if(group[i].checkfigure(x, y))
+						return true;
+                }
+				return false;
+            }
+        }
 		class Circle: Figure
 		{
 			public int rad = 30; // Радиус круга
@@ -112,7 +168,6 @@ namespace _7_laba_OOP
 									y <= (this.y + wight));
 			}
 		}
-
 		class Square: Figure
 		{
 			public int size = 60;
@@ -248,7 +303,7 @@ namespace _7_laba_OOP
 				else
 				{   // Иначе выделяем только один объект
 					// Снимаем выделение у всех объектов хранилища
-					remove_selection_circle(ref storag);
+					remove_selection_circle(ref storag); 
 					paint_figure(Color.Red, 4, ref storag, c);
 				}
 				return;
