@@ -26,7 +26,7 @@ namespace _7_laba_OOP
 			public Figure() { }
 			public virtual string save() { return ""; }
 			public virtual void load(string x, string y, string c, string fillcolor) { }
-			public virtual void load(ref StreamReader sr, Figure figure) { }
+			public virtual void load(ref StreamReader sr, Figure figure, CreateFigure createFigure) { }
 			public virtual void GroupAddFigure(ref Figure object1) { }
 			public virtual void UnGroup(ref Storage stg, int c) { }
 			public virtual void paint_figure(Pen pen, Panel panel_drawing) { }
@@ -35,6 +35,7 @@ namespace _7_laba_OOP
 			public virtual void changesize(int size) { }
 			public virtual bool checkfigure(int x, int y) { return false; }
 			public virtual void setcolor(Color color) {	}
+			public virtual void caseswitch(ref StreamReader sr, ref Figure figure, CreateFigure createFigure) { }
 
 		}
 		class Group : Figure
@@ -56,12 +57,12 @@ namespace _7_laba_OOP
 					str += "\n" + group[i].save();
 				return str;
 			}
-			public override void load(ref StreamReader sr, Figure figure)
+			public override void load(ref StreamReader sr, Figure figure, CreateFigure createFigure)
 			{
 				int chislo = Convert.ToInt32(sr.ReadLine());
 				for (int i = 0; i < chislo; ++i)
 				{
-					caseswitch(ref sr, ref figure);
+					createFigure.caseswitch(ref sr, ref figure, createFigure);
 					GroupAddFigure(ref figure);
 				}
 			}
@@ -290,6 +291,33 @@ namespace _7_laba_OOP
 				fillcolor = color;
 			}
 		}
+		public class CreateFigure: Figure
+        {
+			public override void caseswitch(ref StreamReader sr, ref Figure figure, CreateFigure createFigure)
+            {				
+				string str = sr.ReadLine();
+				switch (str)
+				{   // В зависимости какая фигура выбрана
+					case "Circle":
+						figure = new Circle();
+						figure.load(sr.ReadLine(), sr.ReadLine(), sr.ReadLine(), sr.ReadLine());
+						break;
+					case "Line":
+						figure = new Line();
+						figure.load(sr.ReadLine(), sr.ReadLine(), sr.ReadLine(), sr.ReadLine());
+						break;
+					case "Square":
+						figure = new Square();
+						figure.load(sr.ReadLine(), sr.ReadLine(), sr.ReadLine(), sr.ReadLine());
+						break;
+					case "Group":
+						figure = new Group();
+						figure.load(ref sr, figure, createFigure);
+						break;
+				}
+			}
+        }
+
 		static public void check(int f, int chislo, int gran, int gran1, ref int x)
 		{   // Проверка на выход фигуры за границы
 			if (f > 0 && f < gran)
@@ -624,29 +652,6 @@ namespace _7_laba_OOP
 				}
 			}
 		}
-		static void caseswitch(ref StreamReader sr, ref Figure figure)
-		{
-			string str = sr.ReadLine();
-			switch (str)
-			{   // В зависимости какая фигура выбрана
-				case "Circle":
-					figure = new Circle();
-					figure.load(sr.ReadLine(), sr.ReadLine(), sr.ReadLine(), sr.ReadLine());
-					break;
-				case "Line":
-					figure = new Line();
-					figure.load(sr.ReadLine(), sr.ReadLine(), sr.ReadLine(), sr.ReadLine());
-					break;
-				case "Square":
-					figure = new Square();
-					figure.load(sr.ReadLine(), sr.ReadLine(), sr.ReadLine(), sr.ReadLine());
-					break;
-				case "Group":
-					figure = new Group();
-					figure.load(ref sr, figure);
-					break;
-			}
-		}
 		private void btn_load_Click(object sender, EventArgs e)
 		{
 			StreamReader sr = new StreamReader(path, System.Text.Encoding.Default);
@@ -656,7 +661,8 @@ namespace _7_laba_OOP
 				for (int i = 0; i < strend; ++i)
 				{
 					Figure figure = new Figure();
-					caseswitch(ref sr, ref figure);
+					CreateFigure create = new CreateFigure();
+					create.caseswitch(ref sr, ref figure, create);
 					if (index == k)
 						storag.doubleSize(ref k);
 					storag.add_object(index, ref figure, k, ref indexin);
