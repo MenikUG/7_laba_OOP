@@ -36,6 +36,10 @@ namespace _7_laba_OOP
 			public virtual bool checkfigure(int x, int y) { return false; }
 			public virtual void setcolor(Color color) {	}
 			public virtual void caseswitch(ref StreamReader sr, ref Figure figure, CreateFigure createFigure) { }
+			public virtual void get_min_x(ref int f) { }
+			public virtual void get_max_x(ref int f) { }
+			public virtual void get_min_y(ref int f) { }
+			public virtual void get_max_y(ref int f) { }
 
 		}
 		class Group : Figure
@@ -43,6 +47,7 @@ namespace _7_laba_OOP
 			public int maxcount = 10;
 			public Figure[] group;
 			public int count;
+			int min_x=99999, max_x=0, min_y=99999, max_y=0;
 			public Group()
 			{   // Выделяем maxcount мест в хранилище
 				count = 0;
@@ -88,18 +93,62 @@ namespace _7_laba_OOP
 					group[i].paint_figure(pen, panel_drawing);
 				}
 			}
-			public override void move_x(int x, Panel panel_drawing)
-			{   // Перемещение по оси x
+			public void getsize()
+            {
+				min_x = 99999; max_x = 0; min_y = 99999; max_y = 0;
 				for (int i = 0; i < count; ++i)
 				{
-					group[i].move_x(x, panel_drawing);
+					int f = 0;
+					group[i].get_min_x(ref f);
+					if (f < min_x)
+						min_x = f;
+					group[i].get_max_x(ref f);
+					if (f > max_x)
+						max_x = f;
+					group[i].get_min_y(ref f);
+					if (f < min_y)
+						min_y = f;
+					group[i].get_max_y(ref f);
+					if (f > max_y)
+						max_y = f;
 				}
+			}
+			public override void move_x(int x, Panel panel_drawing)
+			{   // Перемещение по оси x
+				getsize();
+				if ((min_x + x) > 0 && (max_x + x) < panel_drawing.ClientSize.Width)
+				{
+					for (int i = 0; i < count; ++i)
+					{
+						group[i].move_x(x, panel_drawing);
+					}
+				}
+			}
+			public override void get_min_x(ref int f)
+			{
+				f = min_x;
+			}
+			public override void get_max_x(ref int f)
+			{
+				f = max_x;
+			}
+			public override void get_min_y(ref int f)
+			{
+				f = min_y;
+			}
+			public override void get_max_y(ref int f)
+			{
+				f = max_y;
 			}
 			public override void move_y(int y, Panel panel_drawing)
 			{   // Перемещение по оси y
-				for (int i = 0; i < count; ++i)
+				getsize();
+				if ((min_y + y) > 0 && (max_y + y) < panel_drawing.ClientSize.Height)
 				{
-					group[i].move_y(y, panel_drawing);
+					for (int i = 0; i < count; ++i)
+					{
+						group[i].move_y(y, panel_drawing);
+					}
 				}
 			}
 			public override void changesize(int size)
@@ -156,6 +205,22 @@ namespace _7_laba_OOP
 				panel_drawing.CreateGraphics().FillEllipse(
 					figurefillcolor, x, y, rad * 2, rad * 2);
 			}
+			public override void get_min_x(ref int f) 
+			{
+				f = x;		
+			}
+			public override void get_max_x(ref int f)
+			{
+				f = x + (rad*2);
+			}
+			public override void get_min_y(ref int f)
+			{
+				f = y;
+			}
+			public override void get_max_y(ref int f)
+			{
+				f = y + (rad * 2);
+			}
 			public override void move_x(int x, Panel panel_drawing)
 			{	// Перемещение по оси x
 				int c = this.x + x;
@@ -211,6 +276,22 @@ namespace _7_laba_OOP
 				panel_drawing.CreateGraphics().FillRectangle(figurefillcolor, x,
 					y, lenght, wight);
 			}
+			public override void get_min_x(ref int f)
+			{
+				f = x;
+			}
+			public override void get_max_x(ref int f)
+			{
+				f = x + lenght;
+			}
+			public override void get_min_y(ref int f)
+			{
+				f = y;
+			}
+			public override void get_max_y(ref int f)
+			{
+				f = y + wight;
+			}
 			public override void move_x(int x, Panel panel_drawing)
 			{   // Перемещение по оси x
 				int l = this.x + x;
@@ -264,6 +345,22 @@ namespace _7_laba_OOP
 					x, y, size, size);
 				panel_drawing.CreateGraphics().FillRectangle(figurefillcolor,
 					x, y, size, size);
+			}
+			public override void get_min_x(ref int f)
+			{
+				f = x;
+			}
+			public override void get_max_x(ref int f)
+			{
+				f = x + size;
+			}
+			public override void get_min_y(ref int f)
+			{
+				f = y;
+			}
+			public override void get_max_y(ref int f)
+			{
+				f = y + size;
 			}
 			public override void move_x(int x, Panel panel_drawing)
 			{   // Перемещение по оси x
