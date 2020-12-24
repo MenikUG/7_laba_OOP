@@ -19,7 +19,7 @@ namespace _7_laba_OOP
 		}
 
 		public class Figure
-		{	// Composite и factory method
+		{	// Composite
 			public int x, y;
 			public Color color = Color.Navy;
 			public Color fillcolor;
@@ -39,7 +39,7 @@ namespace _7_laba_OOP
 
 		}
 		class Group : Figure
-		{
+		{	// Группа
 			public int maxcount = 10;
 			public Figure[] group;
 			public int count;
@@ -51,14 +51,14 @@ namespace _7_laba_OOP
 					group[i] = null;
 			}
 			public override string save()
-			{
+			{	// Функция сохранения
 				string str = "Group" + "\n" + count;
 				for (int i = 0; i < count; ++i)
 					str += "\n" + group[i].save();
 				return str;
 			}
 			public override void load(ref StreamReader sr, Figure figure, CreateFigure createFigure)
-			{
+			{	// Функция загрузки
 				int chislo = Convert.ToInt32(sr.ReadLine());
 				for (int i = 0; i < chislo; ++i)
 				{
@@ -67,14 +67,14 @@ namespace _7_laba_OOP
 				}
 			}
 			public override void GroupAddFigure(ref Figure object1)
-			{
+			{	// Добавляет фигуру в группу
 				if (count >= maxcount)
 					return;
 				group[count] = object1;
 				++count;
 			}
 			public override void UnGroup(ref Storage stg, int c)
-			{
+			{	// Разгруппировка
 				stg.delete_object(c);
 				for(int i = 0; i < count; ++i)
 				{
@@ -82,35 +82,35 @@ namespace _7_laba_OOP
 				}
 			}
 			public override void paint_figure(Pen pen, Panel panel_drawing)
-			{
+			{	// Отображение группы
 				for(int i = 0; i < count; ++i)
 				{
 					group[i].paint_figure(pen, panel_drawing);
 				}
 			}
 			public override void move_x(int x, Panel panel_drawing)
-			{
+			{   // Перемещение по оси x
 				for (int i = 0; i < count; ++i)
 				{
 					group[i].move_x(x, panel_drawing);
 				}
 			}
 			public override void move_y(int y, Panel panel_drawing)
-			{
+			{   // Перемещение по оси y
 				for (int i = 0; i < count; ++i)
 				{
 					group[i].move_y(y, panel_drawing);
 				}
 			}
 			public override void changesize(int size)
-			{
+			{   // Изменение размера
 				for (int i = 0; i < count; ++i)
 				{
 					group[i].changesize(size);
 				}
 			}
 			public override bool checkfigure(int x, int y)
-			{
+			{	// Проверка на фигуры
 				for(int i = 0; i < count; ++i)
 				{
 					if(group[i].checkfigure(x, y))
@@ -119,7 +119,7 @@ namespace _7_laba_OOP
 				return false;
 			}
 			public override void setcolor(Color color)
-			{
+			{	// Установка цвета
 				for(int i = 0; i < count; ++i)
                 {
 					group[i].setcolor(color);
@@ -138,47 +138,47 @@ namespace _7_laba_OOP
 				this.y = y - rad;
 			}
 			public override string save()
-			{
+			{	// Функция сохранения
 				return "Circle" + "\n" + x + "\n" + y + "\n" + rad + "\n" + fillcolor.ToArgb().ToString();				
 			}
 			public override void load(string x, string y, string rad, string fillcolor)
-			{
+			{	// Функция загрузки
 				this.x = Convert.ToInt32(x);
 				this.y = Convert.ToInt32(y);
 				this.rad = Convert.ToInt32(rad);
 				this.fillcolor = Color.FromArgb(Convert.ToInt32(fillcolor));
 			}
 			public override void paint_figure(Pen pen, Panel panel_drawing)
-			{
+			{   // Отображение фигуры
 				SolidBrush figurefillcolor = new SolidBrush(fillcolor);
 				panel_drawing.CreateGraphics().DrawEllipse(
 					pen, x, y, rad * 2, rad * 2);
 				panel_drawing.CreateGraphics().FillEllipse(
 					figurefillcolor, x, y, rad * 2, rad * 2);
 			}
-			public override void move_x(int x, Panel panel_drawing) 
-			{
+			public override void move_x(int x, Panel panel_drawing)
+			{	// Перемещение по оси x
 				int c = this.x + x;
 				int gran = panel_drawing.ClientSize.Width - (rad * 2);
 				check(c, x, gran, gran - 2, ref this.x);
 			}
 			public override void move_y(int y, Panel panel_drawing)
-			{
+			{   // Перемещение по оси y
 				int c = this.y + y;
 				int gran = panel_drawing.ClientSize.Height - (rad * 2);
 				check(c, y, gran, gran - 2, ref this.y);
 			}
 			public override void changesize(int size)
-			{
+			{   // Изменение размера
 				rad += size;
 			}
 			public override bool checkfigure(int x, int y)
-			{
+			{   // Проверка на фигуры
 				return ((x - this.x - rad) * (x - this.x - rad) + (y - this.y - rad) *
 					(y - this.y - rad)) < (rad * rad);
 			}
 			public override void setcolor(Color color)
-			{
+			{   // Установка цвета
 				fillcolor = color;
 			}
 		}
@@ -193,18 +193,18 @@ namespace _7_laba_OOP
 				this.y = y;
 			}
 			public override string save()
-			{
+			{   // Функция сохранения
 				return "Line" + "\n" + x + "\n" + y + "\n" + lenght + "\n" + fillcolor.ToArgb().ToString();
 			}
 			public override void load(string x, string y, string lenght, string fillcolor)
-			{
+			{   // Функция загрузки
 				this.x = Convert.ToInt32(x);
 				this.y = Convert.ToInt32(y);
 				this.lenght = Convert.ToInt32(lenght);
 				this.fillcolor = Color.FromArgb(Convert.ToInt32(fillcolor));
 			}
 			public override void paint_figure(Pen pen, Panel panel_drawing)
-			{
+			{   // Отображение фигуры
 				SolidBrush figurefillcolor = new SolidBrush(fillcolor);
 				panel_drawing.CreateGraphics().DrawRectangle(pen, x,
 										y, lenght, wight);
@@ -212,28 +212,28 @@ namespace _7_laba_OOP
 					y, lenght, wight);
 			}
 			public override void move_x(int x, Panel panel_drawing)
-			{
+			{   // Перемещение по оси x
 				int l = this.x + x;
 				int gran = panel_drawing.ClientSize.Width - lenght;
 				check(l, x, gran, --gran, ref this.x);
 			}
 			public override void move_y(int y, Panel panel_drawing)
-			{
+			{   // Перемещение по оси y
 				int l = this.y + y;
 				int gran = panel_drawing.ClientSize.Height - wight;
 				check(l, y, gran, --gran, ref this.y);
 			}
 			public override void changesize(int size)
-			{
+			{   // Изменение размера
 				lenght += size;
 			}
 			public override bool checkfigure(int x, int y)
-			{
+			{   // Проверка на фигуры
 				return (this.x <= x && x <= (this.x + lenght) && (this.y - 2) <= y &&
 									y <= (this.y + wight));
 			}
 			public override void setcolor(Color color)
-			{
+			{   // Установка цвета
 				fillcolor = color;
 			}
 		}
@@ -247,18 +247,18 @@ namespace _7_laba_OOP
 				this.y = y - size/2;
 			}
 			public override string save()
-			{
+			{   // Функция сохранения
 				return "Square" + "\n" + x + "\n" + y + "\n" + size + "\n" + fillcolor.ToArgb().ToString();
 			}
 			public override void load(string x, string y, string size, string fillcolor)
-			{
+			{   // Функция загрузки
 				this.x = Convert.ToInt32(x);
 				this.y = Convert.ToInt32(y);
 				this.size = Convert.ToInt32(size);
 				this.fillcolor = Color.FromArgb(Convert.ToInt32(fillcolor));
 			}
 			public override void paint_figure(Pen pen, Panel panel_drawing)
-			{
+			{   // Отображение фигуры
 				SolidBrush figurefillcolor = new SolidBrush(fillcolor);
 				panel_drawing.CreateGraphics().DrawRectangle(pen,
 					x, y, size, size);
@@ -266,33 +266,33 @@ namespace _7_laba_OOP
 					x, y, size, size);
 			}
 			public override void move_x(int x, Panel panel_drawing)
-			{
+			{   // Перемещение по оси x
 				int s = this.x + x;
 				int gran = panel_drawing.ClientSize.Width - size;
 				check(s, x, gran, --gran, ref this.x);
 			}
 			public override void move_y(int y, Panel panel_drawing)
-			{
+			{   // Перемещение по оси y
 				int s = this.y + y;
 				int gran = panel_drawing.ClientSize.Height - size;
 				check(s, y, gran, --gran, ref this.y);
 			}
 			public override void changesize(int size)
-			{
+			{   // Изменение размера
 				this.size += size;
 			}
 			public override bool checkfigure(int x, int y)
-			{
+			{   // Проверка на фигуры
 				return (this.x <= x && x <= (this.x + size) &&
 										this.y <= y && y <= (this.y + size));
 			}
 			public override void setcolor(Color color)
-			{
+			{   // Установка цвета
 				fillcolor = color;
 			}
 		}
 		public class CreateFigure: Figure
-        {
+        {	// Используем Factory Method
 			public override void caseswitch(ref StreamReader sr, ref Figure figure, CreateFigure createFigure)
             {				
 				string str = sr.ReadLine();
@@ -508,6 +508,17 @@ namespace _7_laba_OOP
 				}
 			}
 		}
+		private void Clear_Click(object sender, EventArgs e)
+		{   // Очистка хранилища и панели
+			for (int i = 0; i < k; ++i)
+			{
+				if (!storag.check_empty(i))
+				{
+					storag.delete_object(i);
+				}
+			}
+			panel_drawing.Refresh();
+		}
 		private void paint_figure(Color name, int size, ref Storage stg, int index)
 		{   // Рисует фигуру на панели          
 			// Объявляем объект - карандаш, которым будем рисовать контур
@@ -612,7 +623,7 @@ namespace _7_laba_OOP
 			}
 		}
 		private void btn_group_Click(object sender, EventArgs e)
-		{
+		{	// Создаём группу из выделенных фигур
 			Figure group = new Group();
 			for (int i = 0; i < k; ++i)
 			{
@@ -626,7 +637,7 @@ namespace _7_laba_OOP
 			storag.add_object(index, ref group, k, ref indexin);
 		}
 		private void btn_ungroup_Click(object sender, EventArgs e)
-		{
+		{	// Разгруппировка группы
 			for (int i = 0; i < k; ++i)
 			{
 				if (!storag.check_empty(i))
@@ -639,7 +650,7 @@ namespace _7_laba_OOP
 		}
 		string path = @"D:\Projects\7_laba_OOP\7_laba_OOP\File.txt";
 		private void btn_save_Click(object sender, EventArgs e)
-		{
+		{	// Сохраяем хранилище в файл
 			using (StreamWriter sw = new StreamWriter(path, false, System.Text.Encoding.Default))
 			{
 				sw.WriteLine(storag.occupied(k));
@@ -653,7 +664,7 @@ namespace _7_laba_OOP
 			}
 		}
 		private void btn_load_Click(object sender, EventArgs e)
-		{
+		{	// Загружаем данные из файла
 			StreamReader sr = new StreamReader(path, System.Text.Encoding.Default);
 			{
 				string str = sr.ReadLine();
@@ -664,24 +675,13 @@ namespace _7_laba_OOP
 					CreateFigure create = new CreateFigure();
 					create.caseswitch(ref sr, ref figure, create);
 					if (index == k)
-						storag.doubleSize(ref k);
+						storag.doubleSize(ref k); 
 					storag.add_object(index, ref figure, k, ref indexin);
 					++index;
 				}
 				paint_all(ref storag);
 				sr.Close();
 			}
-		}
-		private void Clear_Click(object sender, EventArgs e)
-		{
-			for(int i = 0; i < k; ++i)
-			{
-				if (!storag.check_empty(i))
-				{
-					storag.delete_object(i);
-				}
-			}
-			panel_drawing.Refresh();
 		}
 	}
 }
